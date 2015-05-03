@@ -7,9 +7,12 @@ tags:
   - misc
 subordinate: true
 provides:
-  project:
-    interface: dockerfile
+  api:
+    interface: http
 requires:
   docker-host:
     interface: juju-info
     scope: container
+  project:
+    interface: dockerfile
+
