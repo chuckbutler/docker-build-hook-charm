@@ -1,0 +1,10 @@
+options:
+  user:
+    type: string
+    default: "ubuntu"
+    description: "user to run the service as"
+  port:
+    type: int
+    default: 8080
+    description: "Port to run the service on"
+

@@ -1,0 +1,22 @@
+#!/bin/bash
+
+set -eux
+
+# Check for Hooked configuration file
+
+mkdir -p /home/ubuntu/hooked
+
+if [ ! -f /home/ubuntu/hooked/projects.cfg ]; then
+    cp $CHARM_DIR/templates/projects.cfg /home/ubuntu/hooked/projects.cfg
+    chown ubuntu:ubuntu /home/ubuntu/hooked/projects.cfg
+    chmod 755 /home/ubuntu/hooked/projects.cfg
+fi
+
+# Check for the upstart job to run hooked webservice
+if [ ! -f /etc/init/webhooks.conf ]; then
+    cp $CHARM_DIR/templates/webhooks.conf /etc/init/webhooks.conf
+    chown root:root /etc/init/webhooks.conf
+    chmod 755 /etc/init/webhooks.conf
+fi
+
+

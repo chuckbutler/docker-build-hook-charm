@@ -1,0 +1,6 @@
+#!/bin/bash
+
+set -eux
+
+service webhooks restart || service webhooks start
+

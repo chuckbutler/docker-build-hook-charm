@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -eux
+
+service webhooks stop
+
+rm -rf /home/ubuntu/hooked
+rm /etc/init/webhooks.conf
+
