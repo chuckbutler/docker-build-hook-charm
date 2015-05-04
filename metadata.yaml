@@ -1,5 +1,5 @@
 name: docker-build-hook
-summary: Deploys a build-hook service to pull/build a docker project from a dockerfile
+summary: Deploys a build-hook service to pull/build a dockerfile project
 maintainer: Charles Butler <charles.butler@ubuntu.com>
 description: |
     Homebrew post-commit hook for building/deploying a docker container from github.
