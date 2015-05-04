@@ -2,14 +2,16 @@
 
 set -eux
 
+HOOKED_DIR=/home/ubuntu/hooked
+
 # Check for Hooked configuration file
 
 mkdir -p /home/ubuntu/hooked
 
-if [ ! -f /home/ubuntu/hooked/projects.cfg ]; then
-    cp $CHARM_DIR/templates/projects.cfg /home/ubuntu/hooked/projects.cfg
-    chown ubuntu:ubuntu /home/ubuntu/hooked/projects.cfg
-    chmod 755 /home/ubuntu/hooked/projects.cfg
+if [ ! -f $HOOKED_DIR/projects.cfg ]; then
+    cp $CHARM_DIR/templates/projects.cfg $HOOKED_DIR/projects.cfg
+    chown ubuntu:ubuntu $HOOKED_DIR/projects.cfg
+    chmod 755 $HOOKED_DIR/projects.cfg
 fi
 
 # Check for the upstart job to run hooked webservice
@@ -19,4 +21,10 @@ if [ ! -f /etc/init/webhooks.conf ]; then
     chmod 755 /etc/init/webhooks.conf
 fi
 
+# Check for Build-Hook script
 
+if [ ! -f $HOOKED_DIR/build-hook.py ]; then
+    wget https://gist.githubusercontent.com/chuckbutler/dc8998499603f2789856/raw/3335f9ef115dcd493ce98a67a99719267e573fcc/build-hook.py -O /home/ubuntu/hooked/build-hook.py
+    chmod 777 $HOOKED_DIR/build-hook.py
+    chown ubuntu:ubuntu $HOOKED_DIR/build-hook.py
+fi

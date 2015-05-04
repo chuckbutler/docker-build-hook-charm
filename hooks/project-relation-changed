@@ -1,0 +1,48 @@
+#!/bin/bash
+
+set -eu
+
+PRIVATEIP=$(unit-get private-address)
+REMOTEIP=$(relation-get private-address)
+BUILDSCRIPT=$(relation-get buildscript)
+LOCALPATH=$(relation-get localpath)
+STARTSCRIPT=$(relation-get startscript)
+REPOSITORY=$(relation-get repository)
+
+
+# Script specific variables
+BUILD_HOOK=/home/ubuntu/hooked/build-script.py
+PROJECT=$(echo $REPOSITORY | awk -F '/' '{print $5}' | sed s'/.git//')
+PROJECTCFGPATH=/home/ubuntu/hooked/projects.cfg
+
+if [[ "$PRIVATEIP" != "$REMOTEIP" ]]; then
+  echo "Not on same host, nothing to do..."
+  exit 0
+fi
+
+if [ -z "$LOCALPATH" ]; then
+    echo "No data present for Localpath. Exiting until present"
+    exit 0
+fi
+
+cd $LOCALPATH
+
+# Work around grep being angry when nothing is found
+set +e
+FOUND_PROJECT=$(grep -wis $PROJECT $PROJECTCFGPATH)
+set -e
+
+if [ -z "$BUILDSCRIPT" ]; then
+   echo "no buildscript"
+else
+   if [ -z "$FOUND_PROJECT" ]; then
+     echo "[$PROJECT]" >> $PROJECTCFGPATH
+     echo "repository = $PROJECT" >> $PROJECTCFGPATH
+     echo "branch = master" >> $PROJECTCFGPATH
+     echo "command = $LOCALPATH/$BUILDSCRIPT" >> $PROJECTCFGPATH
+     echo "" >> $PROJECTCFGPATH
+     service webhooks restart
+   else
+     echo "Project found in config file - bailing for now - TODO #1"
+   fi
+fi
